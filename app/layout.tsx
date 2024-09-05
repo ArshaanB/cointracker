@@ -3,6 +3,7 @@
 import { Inter } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import './globals.css'
+import { CoinProvider } from './context/CoinContext'
 
 const fontHeading = Inter({
   subsets: ['latin'],
@@ -16,13 +17,17 @@ const fontBody = Inter({
   variable: '--font-body'
 })
 
-export default function Layout({ children }) {
+export default function RootLayout({
+  children
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
       <body
         className={cn('antialiased', fontHeading.variable, fontBody.variable)}
       >
-        {children}
+        <CoinProvider>{children}</CoinProvider>
       </body>
     </html>
   )
