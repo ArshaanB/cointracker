@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, KeyboardEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useCoinContext } from '@/app/context/CoinContext'
@@ -10,14 +10,22 @@ export default function AddCoinComponent() {
   const { addCoin } = useCoinContext()
 
   const handleAddCoin = () => {
-    const newCoin = {
-      id: coinName.toLowerCase(),
-      name: coinName,
-      symbol: coinName.toUpperCase().slice(0, 3)
+    if (coinName.trim()) {
+      const newCoin = {
+        id: coinName.toLowerCase(),
+        name: coinName,
+        symbol: coinName.toUpperCase().slice(0, 3)
+      }
+      addCoin(newCoin)
+      console.log(`Adding ${coinName} to watchlist`)
+      setCoinName('') // Clear the input after adding
     }
-    addCoin(newCoin)
-    console.log(`Adding ${coinName} to watchlist`)
-    setCoinName('') // Clear the input after adding
+  }
+
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleAddCoin()
+    }
   }
 
   return (
@@ -29,6 +37,7 @@ export default function AddCoinComponent() {
             placeholder="Enter coin name"
             value={coinName}
             onChange={(e) => setCoinName(e.target.value)}
+            onKeyPress={handleKeyPress}
             className="flex-grow bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-200"
           />
           <Button

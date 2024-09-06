@@ -1,9 +1,12 @@
 // This is the root layout component for your Next.js app.
 // Learn more: https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts#root-layout-required
+'use client'
+
 import { Inter } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import './globals.css'
 import { CoinProvider } from './context/CoinContext'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const fontHeading = Inter({
   subsets: ['latin'],
@@ -17,6 +20,8 @@ const fontBody = Inter({
   variable: '--font-body'
 })
 
+const queryClient = new QueryClient()
+
 export default function RootLayout({
   children
 }: {
@@ -25,9 +30,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={cn('antialiased', fontHeading.variable, fontBody.variable)}
+        className={cn(
+          'antialiased',
+          `${fontHeading.variable} ${fontBody.variable}`
+        )}
       >
-        <CoinProvider>{children}</CoinProvider>
+        <QueryClientProvider client={queryClient}>
+          <CoinProvider>{children}</CoinProvider>
+        </QueryClientProvider>
       </body>
     </html>
   )
