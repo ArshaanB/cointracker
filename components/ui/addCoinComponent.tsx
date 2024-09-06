@@ -1,52 +1,84 @@
 'use client'
 
-import { useState, KeyboardEvent } from 'react'
-import { Button } from '@/components/ui/button'
+import { useState, useEffect, KeyboardEvent } from 'react'
 import { Input } from '@/components/ui/input'
 import { useCoinContext } from '@/app/context/CoinContext'
 
 export default function AddCoinComponent() {
-  const [coinName, setCoinName] = useState('')
-  const { addCoin } = useCoinContext()
+  const [searchTerm, setSearchTerm] = useState('')
+  const [matchingCoins, setMatchingCoins] = useState([])
+  const [selectedIndex, setSelectedIndex] = useState(-1)
+  const { allCoins, addCoin } = useCoinContext()
 
-  const handleAddCoin = () => {
-    if (coinName.trim()) {
-      const newCoin = {
-        id: coinName.toLowerCase(),
-        name: coinName,
-        symbol: coinName.toUpperCase().slice(0, 3)
-      }
-      addCoin(newCoin)
-      console.log(`Adding ${coinName} to watchlist`)
-      setCoinName('') // Clear the input after adding
+  useEffect(() => {
+    if (searchTerm && allCoins) {
+      const matches = allCoins
+        .filter((coin) =>
+          coin.name.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .slice(0, 5) // Limit to 5 results
+      setMatchingCoins(matches)
+      setSelectedIndex(-1) // Reset selection when search results change
+    } else {
+      setMatchingCoins([])
+      setSelectedIndex(-1)
     }
+  }, [searchTerm, allCoins])
+
+  const handleCoinSelect = (coin) => {
+    console.log(`Selected coin: ${coin.name}`)
+    addCoin(coin)
+    setSearchTerm('')
+    setMatchingCoins([])
+    setSelectedIndex(-1)
   }
 
-  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleAddCoin()
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (matchingCoins.length === 0) return
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setSelectedIndex((prevIndex) =>
+        prevIndex < matchingCoins.length - 1 ? prevIndex + 1 : prevIndex
+      )
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : -1))
+    } else if (e.key === 'Enter' && selectedIndex >= 0) {
+      handleCoinSelect(matchingCoins[selectedIndex])
     }
   }
 
   return (
     <div className="w-full bg-background border-b border-gray-200 py-4">
       <div className="max-w-4xl mx-auto px-4">
-        <div className="flex items-center space-x-4">
+        <div className="relative">
           <Input
             type="text"
-            placeholder="Enter coin name"
-            value={coinName}
-            onChange={(e) => setCoinName(e.target.value)}
-            onKeyPress={handleKeyPress}
-            className="flex-grow bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-200"
+            placeholder="Search for a coin"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="w-full bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-200"
           />
-          <Button
-            onClick={handleAddCoin}
-            disabled={!coinName.trim()}
-            className="bg-black text-white hover:bg-gray-800 transition-colors duration-200 px-6 py-2 rounded-md font-medium"
-          >
-            Add to watchlist
-          </Button>
+          {matchingCoins.length > 0 && (
+            <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+              {matchingCoins.map((coin, index) => (
+                <div
+                  key={coin.id}
+                  className={`px-4 py-2 hover:bg-gray-100 cursor-pointer ${
+                    index === selectedIndex ? 'bg-gray-200' : ''
+                  }`}
+                  onClick={() => handleCoinSelect(coin)}
+                >
+                  {coin.name}{' '}
+                  <span className="text-gray-500 ml-2">
+                    {coin.symbol.toUpperCase()}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

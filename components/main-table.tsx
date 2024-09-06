@@ -62,7 +62,7 @@ export function MainTable() {
               <TableCell>
                 <div className="flex items-center space-x-2">
                   <span>
-                    {coin.name} {coin.symbol}
+                    {coin.name} {coin.symbol.toUpperCase()}
                   </span>
                 </div>
               </TableCell>
