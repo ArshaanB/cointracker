@@ -33,9 +33,9 @@ export function MainTable() {
             <TableHead>Coin</TableHead>
             <TableHead>Price</TableHead>
             {/* <TableHead className="w-20">Since</TableHead> */}
-            {/* <TableHead className="w-10">1h</TableHead> */}
+            <TableHead className="w-10">1h</TableHead>
             <TableHead className="w-10">24h</TableHead>
-            {/* <TableHead className="w-10">7d</TableHead> */}
+            <TableHead className="w-10">7d</TableHead>
             <TableHead>Market Cap</TableHead>
           </TableRow>
         </TableHeader>
@@ -49,7 +49,7 @@ export function MainTable() {
                   </span>
                 </div>
               </TableCell>
-              <TableCell>{coin.current_price}</TableCell>
+              <TableCell>${coin.current_price_pretty}</TableCell>
               {/* <TableCell
                 className={
                   parseFloat(coin.since) >= 0
@@ -59,33 +59,51 @@ export function MainTable() {
               >
                 {parseFloat(coin.since) >= 0 ? '▲' : '▼'} {coin.since}
               </TableCell> */}
-              {/* <TableCell
-                className={
-                  parseFloat(coin.hour1) >= 0
-                    ? 'text-green-500'
-                    : 'text-red-500'
-                }
-              >
-                {parseFloat(coin.hour1) >= 0 ? '▲' : '▼'} {coin.hour1}
-              </TableCell> */}
               <TableCell
                 className={
-                  parseFloat(coin.price_change_percentage_24h) >= 0
+                  coin.price_change_percentage_1h_in_currency >= 0
                     ? 'text-green-500'
                     : 'text-red-500'
                 }
               >
-                {parseFloat(coin.price_change_percentage_24h) >= 0 ? '▲' : '▼'}{' '}
-                {coin.price_change_percentage_24h}
+                <span className="inline-flex items-center">
+                  {coin.price_change_percentage_1h_in_currency >= 0 ? '▲' : '▼'}
+                  <span className="ml-1">
+                    {coin.price_change_percentage_1h_in_currency_pretty}%
+                  </span>
+                </span>
               </TableCell>
-              {/* <TableCell
+              <TableCell
                 className={
-                  parseFloat(coin.day7) >= 0 ? 'text-green-500' : 'text-red-500'
+                  coin.price_change_percentage_24h_in_currency >= 0
+                    ? 'text-green-500'
+                    : 'text-red-500'
                 }
               >
-                {parseFloat(coin.day7) >= 0 ? '▲' : '▼'} {coin.day7}
-              </TableCell> */}
-              <TableCell>{coin.market_cap}</TableCell>
+                <span className="inline-flex items-center">
+                  {coin.price_change_percentage_24h_in_currency >= 0
+                    ? '▲'
+                    : '▼'}
+                  <span className="ml-1">
+                    {coin.price_change_percentage_24h_in_currency_pretty}%
+                  </span>
+                </span>
+              </TableCell>
+              <TableCell
+                className={
+                  coin.price_change_percentage_7d_in_currency >= 0
+                    ? 'text-green-500'
+                    : 'text-red-500'
+                }
+              >
+                <span className="inline-flex items-center">
+                  {coin.price_change_percentage_7d_in_currency >= 0 ? '▲' : '▼'}
+                  <span className="ml-1">
+                    {coin.price_change_percentage_7d_in_currency_pretty}%
+                  </span>
+                </span>
+              </TableCell>
+              <TableCell>${coin.market_cap_pretty}</TableCell>
             </TableRow>
           ))}
         </TableBody>

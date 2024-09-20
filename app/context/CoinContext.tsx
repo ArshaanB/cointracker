@@ -9,15 +9,8 @@ import React, {
   useMemo
 } from 'react';
 import { useCoins } from '../hooks/useCoins';
-
-interface Coin {
-  id: string;
-  name: string;
-  symbol: string;
-  current_price: string;
-  price_change_percentage_24h: string;
-  market_cap: string;
-}
+import { formatCoin } from '../utils/formatCoin';
+import { Coin } from '../types/Coin';
 
 interface CoinContextType {
   savedCoins: Coin[];
@@ -36,9 +29,10 @@ export function CoinProvider({ children }: { children: ReactNode }) {
   const { data: allCoins = [], isLoading: isLoadingCoins } = useCoins();
 
   const addCoin = (coin: Coin) => {
-    if (coin && !savedCoins.some((savedCoin) => savedCoin.id === coin.id)) {
-      setSavedCoins((prevCoins) => [...prevCoins, coin]);
-    }
+    setSavedCoins((prevCoins) => {
+      const formattedCoin = formatCoin(coin);
+      return [...prevCoins, formattedCoin];
+    });
   };
 
   const coinsById = useMemo(() => {
