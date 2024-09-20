@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useCoinContext } from '@/app/context/CoinContext'
+import { useCoinContext } from '@/app/context/CoinContext';
 import {
   Table,
   TableHeader,
@@ -8,39 +8,22 @@ import {
   TableHead,
   TableBody,
   TableCell
-} from './ui/table'
-import { useEffect, useState } from 'react'
+} from './ui/table';
+import { useEffect, useState } from 'react';
 
-interface MainTableDataItem {
-  name: string
-  symbol: string
-  price: string
-  since: string
-  hour1: string
-  hour24: string
-  day7: string
-  marketCap: string
+interface SavedCoins {
+  name: string;
+  symbol: string;
+  current_price: string;
+  // since: string;
+  // hour1: string;
+  price_change_percentage_24h: string;
+  // day7: string;
+  market_cap: string;
 }
 
 export function MainTable() {
-  const { savedCoins } = useCoinContext()
-  const [mainTableData, setMainTableData] = useState<MainTableDataItem[]>([])
-
-  useEffect(() => {
-    const generateData = () =>
-      savedCoins.map((coin) => ({
-        name: coin.name,
-        symbol: coin.symbol,
-        price: `$${(Math.random() * 10000).toFixed(2)}`,
-        since: `${(Math.random() * 2 - 1).toFixed(1)}%`,
-        hour1: `${(Math.random() * 2 - 1).toFixed(1)}%`,
-        hour24: `${(Math.random() * 4 - 2).toFixed(1)}%`,
-        day7: `${(Math.random() * 10 - 5).toFixed(1)}%`,
-        marketCap: `$${(Math.random() * 1000000000000).toFixed(0)}`
-      }))
-
-    setMainTableData(generateData())
-  }, [savedCoins])
+  const { savedCoins } = useCoinContext();
 
   return (
     <div className="container mx-auto p-4">
@@ -49,15 +32,15 @@ export function MainTable() {
           <TableRow>
             <TableHead>Coin</TableHead>
             <TableHead>Price</TableHead>
-            <TableHead className="w-20">Since</TableHead>
-            <TableHead className="w-10">1h</TableHead>
+            {/* <TableHead className="w-20">Since</TableHead> */}
+            {/* <TableHead className="w-10">1h</TableHead> */}
             <TableHead className="w-10">24h</TableHead>
-            <TableHead className="w-10">7d</TableHead>
+            {/* <TableHead className="w-10">7d</TableHead> */}
             <TableHead>Market Cap</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {mainTableData.map((coin, index) => (
+          {savedCoins.map((coin, index) => (
             <TableRow key={index}>
               <TableCell>
                 <div className="flex items-center space-x-2">
@@ -66,8 +49,8 @@ export function MainTable() {
                   </span>
                 </div>
               </TableCell>
-              <TableCell>{coin.price}</TableCell>
-              <TableCell
+              <TableCell>{coin.current_price}</TableCell>
+              {/* <TableCell
                 className={
                   parseFloat(coin.since) >= 0
                     ? 'text-green-500'
@@ -75,8 +58,8 @@ export function MainTable() {
                 }
               >
                 {parseFloat(coin.since) >= 0 ? '▲' : '▼'} {coin.since}
-              </TableCell>
-              <TableCell
+              </TableCell> */}
+              {/* <TableCell
                 className={
                   parseFloat(coin.hour1) >= 0
                     ? 'text-green-500'
@@ -84,28 +67,29 @@ export function MainTable() {
                 }
               >
                 {parseFloat(coin.hour1) >= 0 ? '▲' : '▼'} {coin.hour1}
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 className={
-                  parseFloat(coin.hour24) >= 0
+                  parseFloat(coin.price_change_percentage_24h) >= 0
                     ? 'text-green-500'
                     : 'text-red-500'
                 }
               >
-                {parseFloat(coin.hour24) >= 0 ? '▲' : '▼'} {coin.hour24}
+                {parseFloat(coin.price_change_percentage_24h) >= 0 ? '▲' : '▼'}{' '}
+                {coin.price_change_percentage_24h}
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 className={
                   parseFloat(coin.day7) >= 0 ? 'text-green-500' : 'text-red-500'
                 }
               >
                 {parseFloat(coin.day7) >= 0 ? '▲' : '▼'} {coin.day7}
-              </TableCell>
-              <TableCell>{coin.marketCap}</TableCell>
+              </TableCell> */}
+              <TableCell>{coin.market_cap}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }
