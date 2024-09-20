@@ -30,26 +30,29 @@ export function MainTable() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Coin</TableHead>
-            <TableHead>Price</TableHead>
+            <TableHead className="font-bold">Coin</TableHead>
+            <TableHead className="text-right">Price</TableHead>
             {/* <TableHead className="w-20">Since</TableHead> */}
-            <TableHead className="w-10">1h</TableHead>
-            <TableHead className="w-10">24h</TableHead>
-            <TableHead className="w-10">7d</TableHead>
-            <TableHead>Market Cap</TableHead>
+            <TableHead className="w-10 text-center">1h</TableHead>
+            <TableHead className="w-10 text-center">24h</TableHead>
+            <TableHead className="w-10 text-center">7d</TableHead>
+            <TableHead className="text-right">Market Cap</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {savedCoins.map((coin, index) => (
             <TableRow key={index}>
               <TableCell>
-                <div className="flex items-center space-x-2">
-                  <span>
-                    {coin.name} {coin.symbol.toUpperCase()}
+                <div className="flex flex-col">
+                  <span className="text-md font-semibold">
+                    {coin.symbol.toUpperCase()}
                   </span>
+                  <span className="text-xs text-gray-500">{coin.name}</span>
                 </div>
               </TableCell>
-              <TableCell>${coin.current_price_pretty}</TableCell>
+              <TableCell className="text-right">
+                ${coin.current_price_pretty}
+              </TableCell>
               {/* <TableCell
                 className={
                   parseFloat(coin.since) >= 0
@@ -60,11 +63,11 @@ export function MainTable() {
                 {parseFloat(coin.since) >= 0 ? '▲' : '▼'} {coin.since}
               </TableCell> */}
               <TableCell
-                className={
+                className={`text-center ${
                   coin.price_change_percentage_1h_in_currency >= 0
                     ? 'text-green-500'
                     : 'text-red-500'
-                }
+                }`}
               >
                 <span className="inline-flex items-center">
                   {coin.price_change_percentage_1h_in_currency >= 0 ? '▲' : '▼'}
@@ -74,11 +77,11 @@ export function MainTable() {
                 </span>
               </TableCell>
               <TableCell
-                className={
+                className={`text-center ${
                   coin.price_change_percentage_24h_in_currency >= 0
                     ? 'text-green-500'
                     : 'text-red-500'
-                }
+                }`}
               >
                 <span className="inline-flex items-center">
                   {coin.price_change_percentage_24h_in_currency >= 0
@@ -90,11 +93,11 @@ export function MainTable() {
                 </span>
               </TableCell>
               <TableCell
-                className={
+                className={`text-center ${
                   coin.price_change_percentage_7d_in_currency >= 0
                     ? 'text-green-500'
                     : 'text-red-500'
-                }
+                }`}
               >
                 <span className="inline-flex items-center">
                   {coin.price_change_percentage_7d_in_currency >= 0 ? '▲' : '▼'}
@@ -103,7 +106,9 @@ export function MainTable() {
                   </span>
                 </span>
               </TableCell>
-              <TableCell>${coin.market_cap_pretty}</TableCell>
+              <TableCell className="text-right">
+                ${coin.market_cap_pretty}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
