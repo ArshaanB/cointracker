@@ -39,7 +39,7 @@ export default function LoginSignup() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-100 overflow-hidden">
+    <div className="flex items-center justify-center bg-gray-100 py-24">
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>{isLogin ? 'Login' : 'Sign Up'}</CardTitle>

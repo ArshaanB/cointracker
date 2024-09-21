@@ -11,7 +11,7 @@ export default function Home() {
   const { session } = useAuthContext();
 
   return (
-    <main>
+    <main className="min-h-screen bg-gray-100">
       <TopBar />
       {session ? (
         <>
