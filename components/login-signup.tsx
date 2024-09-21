@@ -18,14 +18,10 @@ export default function LoginSignup() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically handle the login or signup logic
-    console.log(isLogin ? 'Logging in' : 'Signing up', { email, password });
-  };
-
-  const handleAuth = async () => {
     if (isLogin) {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -33,8 +29,12 @@ export default function LoginSignup() {
       });
       if (error) alert(error.message);
     } else {
-      const { error } = await supabase.auth.signUp({ email, password });
-      if (error) alert(error.message);
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) {
+        alert(error.message);
+      } else {
+        setMessage('Please check your email to confirm your account.');
+      }
     }
   };
 
@@ -49,7 +49,7 @@ export default function LoginSignup() {
               : 'Create a new account'}
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleAuth}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -72,9 +72,10 @@ export default function LoginSignup() {
                 required
               />
             </div>
+            {message && <p className="text-green-500">{message}</p>}
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" onClick={handleAuth} className="w-full">
+            <Button type="submit" className="w-full">
               {isLogin ? 'Login' : 'Sign Up'}
             </Button>
             <Button
