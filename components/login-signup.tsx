@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Alert } from '@/components/ui/alert';
 import { supabase } from '@/lib/supabaseClient';
 
 export default function LoginSignup() {
@@ -39,7 +40,12 @@ export default function LoginSignup() {
   };
 
   return (
-    <div className="flex items-center justify-center bg-gray-100 py-24">
+    <div className="flex flex-col items-center justify-center bg-gray-100 py-24">
+      {message && (
+        <Alert variant="success" className="mb-4 w-[350px] bg-white">
+          {message}
+        </Alert>
+      )}
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>{isLogin ? 'Login' : 'Sign Up'}</CardTitle>
@@ -72,7 +78,6 @@ export default function LoginSignup() {
                 required
               />
             </div>
-            {message && <p className="text-green-500">{message}</p>}
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button type="submit" className="w-full">
