@@ -45,18 +45,19 @@ export const fetchAndStoreCoins = async () => {
       max_supply: coin.max_supply,
       ath: coin.ath,
       ath_change_percentage: coin.ath_change_percentage,
-      ath_date: coin.ath_date,
+      ath_date: coin.ath_date ? new Date(coin.ath_date) : null,
       atl: coin.atl,
       atl_change_percentage: coin.atl_change_percentage,
-      atl_date: coin.atl_date,
-      roi: coin.roi,
-      last_updated: coin.last_updated,
+      atl_date: coin.atl_date ? new Date(coin.atl_date) : null,
+      roi: coin.roi ? JSON.stringify(coin.roi) : null,
+      last_updated: new Date(coin.last_updated),
       price_change_percentage_1h_in_currency:
         coin.price_change_percentage_1h_in_currency,
       price_change_percentage_24h_in_currency:
         coin.price_change_percentage_24h_in_currency,
       price_change_percentage_7d_in_currency:
-        coin.price_change_percentage_7d_in_currency
+        coin.price_change_percentage_7d_in_currency,
+      updated_at: new Date()
     }));
 
     console.log('Attempting to upsert data to Supabase...');
@@ -65,13 +66,19 @@ export const fetchAndStoreCoins = async () => {
       .upsert(formattedData, { onConflict: 'coin_id', count: 'exact' });
 
     if (error) {
-      console.error('Supabase upsert error:', error);
-      throw error;
+      console.error('Supabase upsert error:', JSON.stringify(error, null, 2));
+      throw new Error(`Supabase upsert failed: ${error.message}`);
     }
 
     console.log(`Successfully upserted ${count} rows to Supabase`);
   } catch (error) {
-    console.error('Error in fetchAndStoreCoins:', error);
+    console.error(
+      'Error in fetchAndStoreCoins:',
+      error instanceof Error ? error.message : String(error)
+    );
+    if (error instanceof Error && error.cause) {
+      console.error('Cause:', error.cause);
+    }
     throw error; // Re-throw to be caught by the API route
   } finally {
     console.log('fetchAndStoreCoins completed at:', new Date().toISOString());
