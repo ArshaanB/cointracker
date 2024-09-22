@@ -1,53 +1,54 @@
-'use client'
+'use client';
 
-import { useState, useEffect, KeyboardEvent } from 'react'
-import { Input } from '@/components/ui/input'
-import { useCoinContext } from '@/app/context/CoinContext'
+import { useState, useEffect, KeyboardEvent } from 'react';
+import { Input } from '@/components/ui/input';
+import { useCoinContext } from '@/app/context/CoinContext';
+import { Coin } from '@/app/types/Coin';
 
 export default function AddCoinComponent() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [matchingCoins, setMatchingCoins] = useState([])
-  const [selectedIndex, setSelectedIndex] = useState(-1)
-  const { allCoins, addCoin } = useCoinContext()
+  const [searchTerm, setSearchTerm] = useState('');
+  const [matchingCoins, setMatchingCoins] = useState<Coin[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const { allCoins, addCoin } = useCoinContext();
 
   useEffect(() => {
     if (searchTerm && allCoins) {
       const matches = allCoins
-        .filter((coin) =>
+        .filter((coin: Coin) =>
           coin.name.toLowerCase().includes(searchTerm.toLowerCase())
         )
-        .slice(0, 5) // Limit to 5 results
-      setMatchingCoins(matches)
-      setSelectedIndex(-1) // Reset selection when search results change
+        .slice(0, 5); // Limit to 5 results
+      setMatchingCoins(matches);
+      setSelectedIndex(-1); // Reset selection when search results change
     } else {
-      setMatchingCoins([])
-      setSelectedIndex(-1)
+      setMatchingCoins([]);
+      setSelectedIndex(-1);
     }
-  }, [searchTerm, allCoins])
+  }, [searchTerm, allCoins]);
 
-  const handleCoinSelect = (coin) => {
-    console.log(`Selected coin: ${coin.name}`)
-    addCoin(coin)
-    setSearchTerm('')
-    setMatchingCoins([])
-    setSelectedIndex(-1)
-  }
+  const handleCoinSelect = (coin: Coin) => {
+    console.log(`Selected coin: ${coin.name}`);
+    addCoin(coin);
+    setSearchTerm('');
+    setMatchingCoins([]);
+    setSelectedIndex(-1);
+  };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (matchingCoins.length === 0) return
+    if (matchingCoins.length === 0) return;
 
     if (e.key === 'ArrowDown') {
-      e.preventDefault()
+      e.preventDefault();
       setSelectedIndex((prevIndex) =>
         prevIndex < matchingCoins.length - 1 ? prevIndex + 1 : prevIndex
-      )
+      );
     } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : -1))
+      e.preventDefault();
+      setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : -1));
     } else if (e.key === 'Enter' && selectedIndex >= 0) {
-      handleCoinSelect(matchingCoins[selectedIndex])
+      handleCoinSelect(matchingCoins[selectedIndex]);
     }
-  }
+  };
 
   return (
     <div className="w-full bg-background border-b border-gray-200 py-4">
@@ -82,5 +83,5 @@ export default function AddCoinComponent() {
         </div>
       </div>
     </div>
-  )
+  );
 }
