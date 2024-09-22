@@ -2,6 +2,7 @@ import { supabase } from './supabaseClient';
 import { Coin } from '../app/types/Coin';
 
 export const fetchAndStoreCoins = async () => {
+  console.log('fetchAndStoreCoins started at:', new Date().toISOString());
   try {
     const response = await fetch(
       'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&price_change_percentage=1h%2C24h%2C7d',
@@ -16,6 +17,8 @@ export const fetchAndStoreCoins = async () => {
       throw new Error('Network response was not ok');
     }
     const data: Coin[] = await response.json();
+
+    console.log(`Fetched ${data.length} coins from CoinGecko API`);
 
     const formattedData = data.map((coin) => ({
       coin_id: coin.id,
@@ -52,16 +55,21 @@ export const fetchAndStoreCoins = async () => {
         coin.price_change_percentage_7d_in_currency
     }));
 
+    console.log('Attempting to upsert data to Supabase...');
+
     const { error } = await supabase
       .from('allCoins')
       .upsert(formattedData, { onConflict: 'coin_id' });
 
     if (error) {
+      console.error('Supabase upsert error:', error);
       throw error;
     }
 
     console.log('Coin data upserted successfully.');
   } catch (error) {
     console.error('Error in fetchAndStoreCoins:', error);
+  } finally {
+    console.log('fetchAndStoreCoins completed at:', new Date().toISOString());
   }
 };
