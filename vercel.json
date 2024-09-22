@@ -1,0 +1,7 @@
+{
+    "functions": {
+      "api/fetch-coins/route.ts": {
+        "schedule": "*/5 * * * *"
+      }
+    }
+  }

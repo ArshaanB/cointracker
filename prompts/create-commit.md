@@ -18,3 +18,10 @@ I'll answer with 1, 2 or 3 which corresponds to the COMMIT_MESSAGE_CHOSEN.
 I want you to produce an output exactly like so with the COMMIT_MESSAGE_CHOSEN replaced with the actual commit message so I can quickly copy and paste it into my Terminal:
 
 git add . && git commit -m "COMMIT_MESSAGE_CHOSEN" && git push
+
+<!-- (IGNORE) Comments for Developer -->
+<!--
+    Can use the following if you're making new files and the @commit doesn't
+    gran all necessary changes.
+    git diff --staged > diff.txt
+ -->
