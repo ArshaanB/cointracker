@@ -4,6 +4,7 @@ import { Coin } from '../app/types/Coin';
 export const fetchAndStoreCoins = async () => {
   console.log('fetchAndStoreCoins started at:', new Date().toISOString());
   try {
+    console.log('Fetching data from CoinGecko API...');
     const response = await fetch(
       'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&price_change_percentage=1h%2C24h%2C7d',
       {
@@ -13,11 +14,14 @@ export const fetchAndStoreCoins = async () => {
         }
       }
     );
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data: Coin[] = await response.json();
 
+    if (!response.ok) {
+      throw new Error(
+        `CoinGecko API responded with status: ${response.status}`
+      );
+    }
+
+    const data: Coin[] = await response.json();
     console.log(`Fetched ${data.length} coins from CoinGecko API`);
 
     const formattedData = data.map((coin) => ({
@@ -56,19 +60,19 @@ export const fetchAndStoreCoins = async () => {
     }));
 
     console.log('Attempting to upsert data to Supabase...');
-
-    const { error } = await supabase
+    const { error, count } = await supabase
       .from('allCoins')
-      .upsert(formattedData, { onConflict: 'coin_id' });
+      .upsert(formattedData, { onConflict: 'coin_id', count: 'exact' });
 
     if (error) {
       console.error('Supabase upsert error:', error);
       throw error;
     }
 
-    console.log('Coin data upserted successfully.');
+    console.log(`Successfully upserted ${count} rows to Supabase`);
   } catch (error) {
     console.error('Error in fetchAndStoreCoins:', error);
+    throw error; // Re-throw to be caught by the API route
   } finally {
     console.log('fetchAndStoreCoins completed at:', new Date().toISOString());
   }
