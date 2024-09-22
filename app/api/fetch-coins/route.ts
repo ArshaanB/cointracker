@@ -7,6 +7,14 @@ export async function GET() {
     'API route /api/fetch-coins called at:',
     new Date().toISOString()
   );
+  console.log(
+    'Supabase URL (first 10 chars):',
+    process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 10)
+  );
+  console.log(
+    'Supabase Anon Key (first 10 chars):',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.substring(0, 10)
+  );
 
   try {
     const supabaseConnected = await testSupabaseConnection();
