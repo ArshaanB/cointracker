@@ -46,7 +46,7 @@ export const fetchAndStoreCoins = async () => {
 
     console.log('Attempting to upsert single coin to Supabase...');
     const { error, count } = await supabase
-      .from('allCoins')
+      .from('allcoins')
       .upsert(singleCoin, {
         onConflict: 'coin_id',
         count: 'exact'
