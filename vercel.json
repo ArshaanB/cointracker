@@ -1,7 +1,8 @@
 {
-    "functions": {
-      "api/fetch-coins/route.ts": {
-        "schedule": "*/5 * * * *"
-      }
+  "crons": [
+    {
+      "path": "/api/fetch-coins",
+      "schedule": "*/5 * * * *"
     }
-  }
+  ]
+}
