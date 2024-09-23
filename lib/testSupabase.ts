@@ -4,7 +4,7 @@ export async function testSupabaseConnection() {
   console.log('Testing Supabase connection...');
   try {
     const { count, error } = await supabase
-      .from('allCoins')
+      .from('allcoins')
       .select('*', { count: 'exact', head: true });
     if (error) throw error;
     console.log('Supabase connection successful. Row count:', count);
