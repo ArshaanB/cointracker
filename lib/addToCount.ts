@@ -1,6 +1,8 @@
 import { supabase } from './supabaseClient';
 
 export async function addNewRow() {
+  const timestamp = new Date().toISOString();
+  console.log(`Cron job ran at: ${timestamp}`);
   try {
     // Get the current count of rows in the 'allcoins' table
     const { count, error } = await supabase
