@@ -13,7 +13,7 @@ export async function addNewRow() {
 
     // Insert a new row with the updated count
     const { data, error: insertError } = await supabase
-      .from('allcoins')
+      .from('count')
       .insert([{ cur_count: newCount }]);
 
     if (insertError) throw insertError;
