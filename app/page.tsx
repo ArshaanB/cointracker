@@ -21,10 +21,7 @@ export default function Home() {
             onClick={async () => {
               try {
                 const response = await fetch('/api/test-route', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  }
+                  method: 'GET'
                 });
                 const data = await response.json();
                 console.log(data);

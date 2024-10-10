@@ -1,4 +1,4 @@
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   const currentDate = new Date().toLocaleString('en-US', {
     timeZone: 'America/New_York'
   });
