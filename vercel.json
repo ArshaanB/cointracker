@@ -3,6 +3,10 @@
     {
       "path": "/api/fetch-coins",
       "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/test-route",
+      "schedule": "*/1 * * * *"
     }
   ]
 }

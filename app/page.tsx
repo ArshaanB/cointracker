@@ -17,6 +17,19 @@ export default function Home() {
         <>
           <AddCoinComponent />
           <MainTable />
+          <button
+            onClick={async () => {
+              try {
+                const response = await fetch('/api/test-route');
+                const data = await response.json();
+                console.log(data);
+              } catch (error) {
+                console.error('Error fetching test route:', error);
+              }
+            }}
+          >
+            Test Route
+          </button>
         </>
       ) : (
         <LoginSignup />
