@@ -20,7 +20,12 @@ export default function Home() {
           <button
             onClick={async () => {
               try {
-                const response = await fetch('/api/test-route');
+                const response = await fetch('/api/test-route', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  }
+                });
                 const data = await response.json();
                 console.log(data);
               } catch (error) {
