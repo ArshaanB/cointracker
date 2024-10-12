@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { fetchAndStoreCoins } from '../../../lib/fetchAndStoreCoins';
-import { testSupabaseConnection } from '../../../lib/testSupabase';
-import { addNewRow } from '../../../lib/addToCount';
+import { fetchAndStoreCoins } from '../../lib/fetchAndStoreCoins';
+import { testSupabaseConnection } from '../../lib/testSupabase';
+import { addNewRow } from '../../lib/addToCount';
 export async function GET() {
   console.log(
     'API route /api/fetch-coins called at:',
