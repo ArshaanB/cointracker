@@ -15,3 +15,6 @@
 .env
 
 diff.txt
+
+# TypeScript incremental compilation file
+tsconfig.tsbuildinfo
